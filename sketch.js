@@ -15,7 +15,9 @@ var confidences = [];
 const knnClassifier = ml5.KNNClassifier();
 let poseNet;
 let poses = [];
+var oldPoses = [];
 var classWithHighestScore = "A";
+var oldResult;
 
 // ------------------------------------------------------------------------------------------------------------------------
 // ------------------------------------------------------------------------------------------------------------------------
@@ -116,18 +118,23 @@ function classify() {
     return;
   }
 
-  // Convert poses results to a 2d array [[score0, x0, y0],...,[score16, x16, y16]]
-  if (poses) {
-    const poseArray = poses[0].pose.keypoints.map(p => [
-      p.score,
-      p.position.x,
-      p.position.y
-    ]);
-
-    // Use knnClassifier to classify which label do these features belong to
-    // You can pass in a callback function `gotResults` to knnClassifier.classify function
-    knnClassifier.classify(poseArray, gotResults);
+  if (poses.length === 0) {
+    poses = oldPoses;
+  } else {
+    oldPoses = poses;
   }
+
+  // Convert poses results to a 2d array [[score0, x0, y0],...,[score16, x16, y16]]
+  const poseArray = poses[0].pose.keypoints.map(p => [
+    p.score,
+    p.position.x,
+    p.position.y
+  ]);
+
+  // Use knnClassifier to classify which label do these features belong to
+  // You can pass in a callback function `gotResults` to knnClassifier.classify function
+  knnClassifier.classify(poseArray, gotResults);
+  // }
 }
 
 // C util function to create UI buttons
@@ -183,17 +190,17 @@ function createButtons() {
   buttonClearAll = select("#clearAll");
   buttonClearAll.mousePressed(clearAllLabels);
 
-  playButton = createButton("playButton");
+  playButton = select("#playButton");
   playButton.mousePressed(() => {
     startAudio();
   });
 
-  saveButton = createButton("saveButton");
+  saveButton = select("#saveButton");
   saveButton.mousePressed(() => {
     knnClassifier.save();
   });
 
-  loadButton = createButton("loadButton");
+  loadButton = select("#loadButton");
   loadButton.mousePressed(() => {
     knnClassifier.load("myKnn.json", customModelReady);
   });
@@ -211,11 +218,14 @@ function gotResults(err, result) {
     // classify();
   }
 
-  if (typeof result.label !== "undefined") {
-    classWithHighestScore = result.label;
+  // if (typeof result.label !== "undefined") {
+  //   classWithHighestScore = result.label;
+  // }
+  if (typeof result === "undefined") {
+    result = oldResult;
   }
 
-  if (typeof result.confidencesByLabel !== "undefined") {
+  if (result.confidencesByLabel) {
     confidences = result.confidencesByLabel;
 
     // result.label is the label that has the highest confidence
@@ -238,6 +248,7 @@ function gotResults(err, result) {
     );
   }
   classify();
+  oldResult = result;
 }
 
 // Update the example count for each label

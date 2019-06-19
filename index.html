@@ -2,7 +2,7 @@
   <head>
     <meta charset="UTF-8" />
     <title>
-      PoseNet with KNN Classification on Webcam Images. Built with p5.js
+      PoseNet with KNN Classification to control Audio
     </title>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.7.3/p5.min.js"></script>
@@ -30,7 +30,13 @@
     <div id="videoContainer"></div>
     <p id="status">Loading Model...</p>
     <br />
+
     <div>
+      <button id="playButton">Play</button>
+      <button id="saveButton">Save Model</button>
+      <button id="loadButton">Load Model</button>
+      <br />
+      <br />
       <button id="addClassA">Add an Example to Class A</button>
       <button id="resetA">Reset Class A</button>
       <p><span id="exampleA">0</span> A examples</p>
