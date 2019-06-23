@@ -388,15 +388,11 @@ function startAudio() {
   sample2.loop();
   sample3.loop();
   sample4.loop();
-<<<<<<< HEAD
   sample5.loop();
-=======
->>>>>>> c9cc90ac206eb0ae9e03eb650796ea3e9fc6f8ff
   // sample1.rate(random() + 0.5);
   // sample2.rate(random() + 0.5);
   // sample3.rate(random() + 0.5);
   // sample4.rate(random() + 0.5);
-<<<<<<< HEAD
 }
 
 function stopAudio() {
@@ -405,6 +401,4 @@ function stopAudio() {
   sample3.stop();
   sample4.stop();
   sample5.stop();
-=======
->>>>>>> c9cc90ac206eb0ae9e03eb650796ea3e9fc6f8ff
 }
