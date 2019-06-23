@@ -7,7 +7,6 @@
 ml5 Example
 KNN Classification on Webcam Images with poseNet. Built with p5.js
 === */
-// var monoSynth;
 let video;
 var counter = 0;
 var confidences = [];
@@ -48,10 +47,8 @@ function setup() {
   canvas.parent("videoContainer");
   video = createCapture(VIDEO);
   video.size(width, height);
-
   // Create the UI buttons
   createButtons();
-
   // Create a new poseNet method with a single detection
   poseNet = ml5.poseNet(video, modelReady);
   // This sets up an event that fills the global variable "poses"
@@ -68,7 +65,6 @@ function draw() {
   // We can call both functions to draw all keypoints and the skeletons
   drawKeypoints();
   drawSkeleton();
-
   audioEngine();
   counter++;
 }
@@ -215,7 +211,6 @@ function gotResults(err, result) {
   // Display any error
   if (err) {
     console.error(err);
-    // classify();
   }
 
   // if (typeof result.label !== "undefined") {
@@ -223,6 +218,8 @@ function gotResults(err, result) {
   // }
   if (typeof result === "undefined") {
     result = oldResult;
+  } else {
+    oldResult = result;
   }
 
   if (result.confidencesByLabel) {
@@ -248,7 +245,6 @@ function gotResults(err, result) {
     );
   }
   classify();
-  oldResult = result;
 }
 
 // Update the example count for each label
@@ -317,8 +313,8 @@ function startAudio() {
   sample2.loop();
   sample3.loop();
   sample4.loop();
-  sample1.rate(random() + 0.5);
-  sample2.rate(random() + 0.5);
-  sample3.rate(random() + 0.5);
-  sample4.rate(random() + 0.5);
+  // sample1.rate(random() + 0.5);
+  // sample2.rate(random() + 0.5);
+  // sample3.rate(random() + 0.5);
+  // sample4.rate(random() + 0.5);
 }
