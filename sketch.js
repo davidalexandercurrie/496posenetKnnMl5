@@ -17,6 +17,9 @@ let poses = [];
 var oldPoses = [];
 var classWithHighestScore = "A";
 var oldResult;
+var startTraining = false;
+var trainingTimer = 0;
+var trainingText = "";
 
 // ------------------------------------------------------------------------------------------------------------------------
 // ------------------------------------------------------------------------------------------------------------------------
@@ -36,6 +39,7 @@ function preload() {
   sample2 = loadSound("samples/sample2.wav");
   sample3 = loadSound("samples/sample3.wav");
   sample4 = loadSound("samples/sample4.wav");
+  sample5 = loadSound("samples/sample5.wav");
 }
 // ------------------------------------------------------------------------------------------------------------------------
 // ------------------------------------------------------------------------------------------------------------------------
@@ -61,12 +65,55 @@ function setup() {
 }
 
 function draw() {
+  if (startTraining) {
+    select("#status").html(trainingText);
+  }
   image(video, 0, 0, width, height);
   // We can call both functions to draw all keypoints and the skeletons
   drawKeypoints();
   drawSkeleton();
   audioEngine();
+  autoTrain();
   counter++;
+}
+
+function autoTrain() {
+  if (startTraining === false) {
+    counter = 0;
+  }
+  if (startTraining === true && counter % 60 === 0) {
+    trainingTimer++;
+    console.log(trainingTimer);
+    if (trainingTimer > 5) {
+      if (trainingTimer <= 10) {
+        addExample("A");
+        trainingText = "Training Class A";
+      } else if (trainingTimer <= 15) {
+        addExample("B");
+        trainingText = "Training Class B";
+      } else if (trainingTimer <= 20) {
+        addExample("C");
+        trainingText = "Training Class C";
+      } else if (trainingTimer <= 25) {
+        addExample("D");
+        trainingText = "Training Class D";
+      } else if (trainingTimer <= 30) {
+        addExample("E");
+        trainingText = "Training Class E";
+      } else {
+        startTraining = false;
+        trainingTimer = 0;
+        select("#status").html("Training Complete... Click Play When Ready");
+      }
+    }
+  }
+  if (startTraining === true) {
+    if (trainingTimer <= 5) {
+      fill(0);
+      textSize(64);
+      select("#status").html("Training in... " + (5 - trainingTimer));
+    }
+  }
 }
 
 function audioEngine() {
@@ -85,21 +132,31 @@ function audioEngine() {
   if (typeof confidences["D"] !== "undefined") {
     sample4.setVolume(confidences["D"] / 2, 0.3);
   }
+
+  if (typeof confidences["E"] !== "undefined") {
+    sample5.setVolume(confidences["E"] / 2, 0.3);
+  }
 }
 
 function modelReady() {
-  select("#status").html("model Loaded");
+  // TODO
+  select("#status").html("Model Loaded");
 }
 
 // Add the current frame from the video to the classifier
 function addExample(label) {
   // Convert poses results to a 2d array [[score0, x0, y0],...,[score16, x16, y16]]
+  if (poses.length === 0) {
+    poses = oldPoses;
+  } else {
+    oldPoses = poses;
+  }
   const poseArray = poses[0].pose.keypoints.map(p => [
     p.score,
     p.position.x,
     p.position.y
   ]);
-
+  console.log("adding example");
   // Add an example with a label to the classifier
   knnClassifier.addExample(poseArray, label);
   updateCounts();
@@ -133,54 +190,54 @@ function classify() {
   // }
 }
 
-// C util function to create UI buttons
+// util function to create UI buttons
 function createButtons() {
-  // When the A button is pressed, add the current frame
-  // from the video with a label of "A" to the classifier
-  buttonA = select("#addClassA");
-  buttonA.mousePressed(function() {
-    addExample("A");
-  });
+  // // // When the A button is pressed, add the current frame
+  // // // from the video with a label of "A" to the classifier
+  // buttonA = select("#addClassA");
+  // buttonA.mousePressed(function() {
+  //   addExample("A");
+  // });
 
-  // When the B button is pressed, add the current frame
-  // from the video with a label of "B" to the classifier
-  buttonB = select("#addClassB");
-  buttonB.mousePressed(function() {
-    addExample("B");
-  });
+  // // When the B button is pressed, add the current frame
+  // // from the video with a label of "B" to the classifier
+  // buttonB = select("#addClassB");
+  // buttonB.mousePressed(function() {
+  //   addExample("B");
+  // });
 
-  buttonC = select("#addClassC");
-  buttonC.mousePressed(function() {
-    addExample("C");
-  });
-  buttonD = select("#addClassD");
-  buttonD.mousePressed(function() {
-    addExample("D");
-  });
+  // buttonC = select("#addClassC");
+  // buttonC.mousePressed(function() {
+  //   addExample("C");
+  // });
+  // buttonD = select("#addClassD");
+  // buttonD.mousePressed(function() {
+  //   addExample("D");
+  // });
 
-  // Reset buttons
-  resetBtnA = select("#resetA");
-  resetBtnA.mousePressed(function() {
-    clearLabel("A");
-  });
+  // // Reset buttons
+  // resetBtnA = select("#resetA");
+  // resetBtnA.mousePressed(function() {
+  //   clearLabel("A");
+  // });
 
-  resetBtnB = select("#resetB");
-  resetBtnB.mousePressed(function() {
-    clearLabel("B");
-  });
+  // resetBtnB = select("#resetB");
+  // resetBtnB.mousePressed(function() {
+  //   clearLabel("B");
+  // });
 
-  resetBtnC = select("#resetC");
-  resetBtnC.mousePressed(function() {
-    clearLabel("C");
-  });
-  resetBtnD = select("#resetD");
-  resetBtnD.mousePressed(function() {
-    clearLabel("D");
-  });
+  // resetBtnC = select("#resetC");
+  // resetBtnC.mousePressed(function() {
+  //   clearLabel("C");
+  // });
+  // resetBtnD = select("#resetD");
+  // resetBtnD.mousePressed(function() {
+  //   clearLabel("D");
+  // });
 
   // Predict button
-  buttonPredict = select("#buttonPredict");
-  buttonPredict.mousePressed(classify);
+  // buttonPredict = select("#buttonPredict");
+  // buttonPredict.mousePressed(classify);
 
   // Clear all classes button
   buttonClearAll = select("#clearAll");
@@ -189,17 +246,31 @@ function createButtons() {
   playButton = select("#playButton");
   playButton.mousePressed(() => {
     startAudio();
+    classify();
   });
 
-  saveButton = select("#saveButton");
-  saveButton.mousePressed(() => {
-    knnClassifier.save();
+  playButton = select("#stopButton");
+  playButton.mousePressed(() => {
+    stopAudio();
   });
 
-  loadButton = select("#loadButton");
-  loadButton.mousePressed(() => {
-    knnClassifier.load("myKnn.json", customModelReady);
-  });
+  // saveButton = select("#saveButton");
+  // saveButton.mousePressed(() => {
+  //   knnClassifier.save();
+  // });
+
+  // loadButton = select("#loadButton");
+  // loadButton.mousePressed(() => {
+  //   knnClassifier.load("myKnn.json", customModelReady);
+  //   console.log("hello");
+  // });
+
+  trainButton = select("#trainButton");
+  trainButton.mousePressed(trainMyModel);
+}
+
+function trainMyModel() {
+  startTraining = true;
 }
 
 function customModelReady() {
@@ -243,6 +314,9 @@ function gotResults(err, result) {
     select("#confidenceD").html(
       `${confidences["D"] ? confidences["D"] * 100 : 0} %`
     );
+    select("#confidenceE").html(
+      `${confidences["E"] ? confidences["E"] * 100 : 0} %`
+    );
   }
   classify();
 }
@@ -255,6 +329,7 @@ function updateCounts() {
   select("#exampleB").html(counts["B"] || 0);
   select("#exampleC").html(counts["C"] || 0);
   select("#exampleD").html(counts["D"] || 0);
+  select("#exampleE").html(counts["E"] || 0);
 }
 
 // Clear the examples in one label
@@ -313,8 +388,23 @@ function startAudio() {
   sample2.loop();
   sample3.loop();
   sample4.loop();
+<<<<<<< HEAD
+  sample5.loop();
+=======
+>>>>>>> c9cc90ac206eb0ae9e03eb650796ea3e9fc6f8ff
   // sample1.rate(random() + 0.5);
   // sample2.rate(random() + 0.5);
   // sample3.rate(random() + 0.5);
   // sample4.rate(random() + 0.5);
+<<<<<<< HEAD
+}
+
+function stopAudio() {
+  sample1.stop();
+  sample2.stop();
+  sample3.stop();
+  sample4.stop();
+  sample5.stop();
+=======
+>>>>>>> c9cc90ac206eb0ae9e03eb650796ea3e9fc6f8ff
 }
