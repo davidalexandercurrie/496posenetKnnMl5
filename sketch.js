@@ -83,7 +83,6 @@ function autoTrain() {
   }
   if (startTraining === true && counter % 60 === 0) {
     trainingTimer++;
-    console.log(trainingTimer);
     if (trainingTimer > 5) {
       if (trainingTimer <= 10) {
         addExample("A");
