@@ -140,7 +140,7 @@ function audioEngine() {
 
 function modelReady() {
   // TODO
-  select("#status").html("Model Loaded");
+  select("#status").html("Click Train Model When Ready");
 }
 
 // Add the current frame from the video to the classifier
