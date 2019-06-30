@@ -19,6 +19,7 @@
 
     <style>
       body {
+        background-image: url("https://66.media.tumblr.com/455b2d59d142eeb7b961ecc125f1ab20/tumblr_mwkt57gAeD1rk0k2jo1_500.gif");
         text-align: center;
         display: inline;
         font-family: monospace;
@@ -31,81 +32,101 @@
         color: lightseagreen;
         text-decoration: none
       }
+      #videoContainer {
+        display: inline-block;
+        width:40%;
+        
+      }
+      #div2 {
+        display: inline-block;
+        background-color: white;
+        width:30%;
+        margin-top: 10px;
+        padding-bottom: 10px;
+        padding-top: 10px;
+        /* border: 3px solid black; */
+      }
     </style>
   </head>
 
   <body>
     <h2></h2>
-    <div id="videoContainer"></div>
-    <p id="status">Loading Model...</p>
-    <br />
-
     <div>
-      <!-- <button id="saveButton">Save Model</button> -->
-      <!-- <button id="loadButton">Load Model</button> -->
-      <button id="trainButton"><svg xmlns="http://www.w3.org/2000/svg"
-          width="24" height="24" viewBox="0 0 24 24">
-          <path
-            d="M12 2c-4 0-8 .5-8 4v9.5C4 17.43 5.57 19 7.5 19L6
-            20.5v.5h2.23l2-2H14l2 2h2v-.5L16.5 19c1.93 0 3.5-1.57
-            3.5-3.5V6c0-3.5-3.58-4-8-4zM7.5 17c-.83 0-1.5-.67-1.5-1.5S6.67 14
-            7.5 14s1.5.67 1.5 1.5S8.33 17 7.5 17zm3.5-7H6V6h5v4zm2
-            0V6h5v4h-5zm3.5 7c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5
-            1.5-.67 1.5-1.5 1.5z" />
-            <path fill="none" d="M0 0h24v24H0V0z" /></svg>Train Model</button>
-          <button id="clearAll"><svg xmlns="http://www.w3.org/2000/svg"
+      <div id="videoContainer"></div>
+      <div id="div2"><p id="status">Loading Model...</p>
+        <br />
+
+        <div>
+          <!-- <button id="saveButton">Save Model</button> -->
+          <!-- <button id="loadButton">Load Model</button> -->
+          <button id="trainButton"><svg xmlns="http://www.w3.org/2000/svg"
               width="24" height="24" viewBox="0 0 24 24">
-              <path d="M5 13h14v-2H5v2zm-2 4h14v-2H3v2zM7 7v2h14V7H7z" />
-                <path d="M0 0h24v24H0z" fill="none" /></svg>Clear All Classes</button><br
-                />
-              <br /><div></div>
-              <p><button id="playButton"><svg xmlns="http://www.w3.org/2000/svg"
-                    width="24" height="24" viewBox="0 0 24 24">
-                    <path d="M8 5v14l11-7z" />
-                      <path d="M0 0h24v24H0z" fill="none" /></svg></button>
-                    Sound Design by <iframe allowtransparency="true"
-                      scrolling="no" frameborder="no"
-                      src="https://w.soundcloud.com/icon/?url=http%3A%2F%2Fsoundcloud.com%2Fevia0&color=black_white&size=24"
-                      style="width: 24px; height: 24px;"></iframe><a
-                      href="https://soundcloud.com/evia0"> èvia</a> </p>
+              <path
+                d="M12 2c-4 0-8 .5-8 4v9.5C4 17.43 5.57 19 7.5 19L6
+                20.5v.5h2.23l2-2H14l2 2h2v-.5L16.5 19c1.93 0 3.5-1.57
+                3.5-3.5V6c0-3.5-3.58-4-8-4zM7.5 17c-.83 0-1.5-.67-1.5-1.5S6.67
+                14
+                7.5 14s1.5.67 1.5 1.5S8.33 17 7.5 17zm3.5-7H6V6h5v4zm2
+                0V6h5v4h-5zm3.5 7c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67
+                1.5
+                1.5-.67 1.5-1.5 1.5z" />
+                <path fill="none" d="M0 0h24v24H0V0z" /></svg>Train Model</button>
+              <button id="clearAll"><svg xmlns="http://www.w3.org/2000/svg"
+                  width="24" height="24" viewBox="0 0 24 24">
+                  <path d="M5 13h14v-2H5v2zm-2 4h14v-2H3v2zM7 7v2h14V7H7z" />
+                    <path d="M0 0h24v24H0z" fill="none" /></svg>Clear All
+                    Classes</button><br
+                    />
+                  <br /><div></div>
+                  <p><button id="playButton"><svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24" height="24" viewBox="0 0 24 24">
+                        <path d="M8 5v14l11-7z" />
+                          <path d="M0 0h24v24H0z" fill="none" /></svg></button>
+                        Sound Design by <iframe allowtransparency="true"
+                          scrolling="no" frameborder="no"
+                          src="https://w.soundcloud.com/icon/?url=http%3A%2F%2Fsoundcloud.com%2Fevia0&color=black_white&size=24"
+                          style="width: 24px; height: 24px;"></iframe><a
+                          href="https://soundcloud.com/evia0"> èvia</a> </p>
+                      <button id="stopButton"><svg
+                          xmlns="http://www.w3.org/2000/svg" width="24"
+                          height="24"
+                          viewBox="0 0 24 24">
+                          <path d="M0 0h24v24H0z" fill="none" />
+                            <path d="M6 6h12v12H6z" /></svg></button></div>
 
-
-                  <button id="stopButton"><svg
-                      xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                      viewBox="0 0 24 24">
-                      <path d="M0 0h24v24H0z" fill="none" />
-                        <path d="M6 6h12v12H6z" /></svg></button></div>
-
-                    <br />
-                    <!-- <button id="addClassA">Add an Example to Class A</button>
+                        <br />
+                        <!-- <button id="addClassA">Add an Example to Class A</button>
       <button id="resetA">Reset Class A</button> -->
-                    <p><span id="exampleA">0</span> A examples</p>
+                        <p><span id="exampleA">0</span> A examples</p>
 
-                    <p>| Confidence in A is: <span id="confidenceA">0</span></p>
-                    <!-- <button id="addClassB">Add an Example to Class B</button>
+                        <p>| Confidence in A is: <span id="confidenceA">0</span></p>
+                        <!-- <button id="addClassB">Add an Example to Class B</button>
       <button id="resetB">Reset Class B</button> -->
-                    <p><span id="exampleB">0</span> B examples</p>
-                    <p>| Confidence in B is: <span id="confidenceB">0</span></p>
-                    <!-- <button id="addClassC">Add an Example to Class C</button>
+                        <p><span id="exampleB">0</span> B examples</p>
+                        <p>| Confidence in B is: <span id="confidenceB">0</span></p>
+                        <!-- <button id="addClassC">Add an Example to Class C</button>
       <button id="resetC">Reset Class C</button> -->
-                    <p><span id="exampleC">0</span> C examples</p>
-                    <p>| Confidence in C is: <span id="confidenceC">0</span></p>
-                    <!-- <button id="addClassD">Add an Example to Class D</button>
+                        <p><span id="exampleC">0</span> C examples</p>
+                        <p>| Confidence in C is: <span id="confidenceC">0</span></p>
+                        <!-- <button id="addClassD">Add an Example to Class D</button>
       <button id="resetD">Reset Class D</button> -->
-                    <p><span id="exampleD">0</span> D examples</p>
-                    <p>| Confidence in D is: <span id="confidenceD">0</span></p>
-                    <!-- <button id="addClassE">Add an Example to Class E</button>
+                        <p><span id="exampleD">0</span> D examples</p>
+                        <p>| Confidence in D is: <span id="confidenceD">0</span></p>
+                        <!-- <button id="addClassE">Add an Example to Class E</button>
       <button id="resetE">Reset Class E</button> -->
-                    <p><span id="exampleE">0</span> E examples</p>
-                    <p>| Confidence in E is: <span id="confidenceE">0</span></p>
-                    <!-- <button id="buttonPredict">Start predicting!</button><br /> -->
-                    <p>
-                      Class:
-                      <span id="result">...</span> with a confidence of
-                      <span id="confidence">...</span>
-                    </p>
+                        <p><span id="exampleE">0</span> E examples</p>
+                        <p>| Confidence in E is: <span id="confidenceE">0</span></p>
+                        <!-- <button id="buttonPredict">Start predicting!</button><br /> -->
+                        <p>
+                          Class:
+                          <span id="result">...</span> with a confidence of
+                          <span id="confidence">...</span>
+                        </p>
 
-                    <script src="sketch.js"></script>
+                        <script src="sketch.js"></script>
+                      </div>
+                    </div>
                   </div>
                 </body>
               </html>
