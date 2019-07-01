@@ -21,6 +21,12 @@ var startTraining = false;
 var trainingTimer = 0;
 var trainingText = "";
 
+var i = 0;
+var colNew = 0;
+var colOld = 0;
+var interpedColour;
+var backgroundColourReady = true;
+
 // ------------------------------------------------------------------------------------------------------------------------
 // ------------------------------------------------------------------------------------------------------------------------
 // ------------------------------------------------------------------------------------------------------------------------
@@ -74,7 +80,37 @@ function draw() {
   drawSkeleton();
   audioEngine();
   autoTrain();
+  backgroundColours();
+
   counter++;
+}
+
+function backgroundColours() {
+  var colour1 = color(240, 99, 242);
+  var colour2 = color(69, 76, 115);
+  var colour3 = color(121, 151, 242);
+  var colour4 = color(82, 226, 242);
+  var colour5 = color(242, 107, 107);
+  var colourArray = [colour1, colour2, colour3, colour4, colour5];
+  if (i % 50 === 0) {
+    if (confidences.length !== 0) {
+      var index = classWithHighestScore.charCodeAt(0) - 65;
+      colOld = colNew;
+      colNew = index;
+    }
+  }
+
+  var colour = lerpColor(
+    colourArray[colOld],
+    colourArray[colNew],
+    (i % 50.0) / 50
+  );
+  var element = select("body");
+  element.style("background-color", colour);
+  if (i % 50 == 0) {
+    backgroundColourReady = true;
+  }
+  i += 2;
 }
 
 function autoTrain() {
@@ -244,6 +280,9 @@ function createButtons() {
 
   playButton = select("#playButton");
   playButton.mousePressed(() => {
+    select("#status").html(
+      "<a href='https://twitter.com/dvdlxndr'>https://twitter.com/dvdlxndr</a>"
+    );
     startAudio();
     classify();
   });
@@ -283,9 +322,6 @@ function gotResults(err, result) {
     console.error(err);
   }
 
-  // if (typeof result.label !== "undefined") {
-  //   classWithHighestScore = result.label;
-  // }
   if (typeof result === "undefined") {
     result = oldResult;
   } else {
@@ -294,6 +330,7 @@ function gotResults(err, result) {
 
   if (result.confidencesByLabel) {
     confidences = result.confidencesByLabel;
+    classWithHighestScore = result.label;
 
     // result.label is the label that has the highest confidence
     if (result.label) {
