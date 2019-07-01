@@ -108,7 +108,6 @@ function backgroundColours() {
   );
   var element = select("body");
   element.style("background-color", colour);
-  console.log(colour);
   i += 2;
 }
 
