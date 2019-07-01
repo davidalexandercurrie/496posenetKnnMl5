@@ -69,7 +69,6 @@ function setup() {
   // Hide the video element, and just show the canvas
   video.hide();
   var element = select("body");
-  element.style("background-color", color(100, 100, 100));
 }
 
 function draw() {
@@ -107,8 +106,9 @@ function backgroundColours() {
     colourArray[colNew],
     (i % 50.0) / 50
   );
-  // var element = select("body");
-  // element.style("background-color", colour);
+  var element = select("body");
+  element.style("background-color", colour);
+  console.log(colour);
   i += 2;
 }
 
