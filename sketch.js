@@ -87,9 +87,9 @@ function draw() {
 }
 
 function backgroundColours() {
-  var colour1 = color(69, 76, 115);
+  var colour1 = color(121, 151, 242);
   var colour2 = color(240, 99, 242);
-  var colour3 = color(121, 151, 242);
+  var colour3 = color(69, 76, 115);
   var colour4 = color(82, 226, 242);
   var colour5 = color(242, 107, 107);
   var colourArray = [colour1, colour2, colour3, colour4, colour5];
