@@ -107,9 +107,6 @@ function backgroundColours() {
   );
   var element = select("body");
   element.style("background-color", colour);
-  if (i % 50 == 0) {
-    backgroundColourReady = true;
-  }
   i += 2;
 }
 
