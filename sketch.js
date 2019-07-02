@@ -22,10 +22,20 @@ var trainingTimer = 0;
 var trainingText = "";
 
 var i = 0;
-var colNew = 0;
-var colOld = 0;
+var colNew = 5;
+var colOld = 5;
 var interpedColour;
 var backgroundColourReady = true;
+
+var colour1;
+var colour2;
+var colour3;
+var colour4;
+var colour5;
+var colour6;
+var colour;
+var colourArray = [];
+var colourBarIndex = 5;
 
 // ------------------------------------------------------------------------------------------------------------------------
 // ------------------------------------------------------------------------------------------------------------------------
@@ -36,6 +46,8 @@ let sample1;
 let sample2;
 let sample3;
 let sample4;
+let sample5;
+var playing = false;
 // ------------------------------------------------------------------------------------------------------------------------
 // ------------------------------------------------------------------------------------------------------------------------
 // ------------------------------------------------------------------------------------------------------------------------
@@ -68,7 +80,6 @@ function setup() {
   });
   // Hide the video element, and just show the canvas
   video.hide();
-  var element = select("body");
 }
 
 function draw() {
@@ -79,20 +90,26 @@ function draw() {
   // We can call both functions to draw all keypoints and the skeletons
   drawKeypoints();
   drawSkeleton();
-  audioEngine();
-  autoTrain();
+  if (playing) {
+    audioEngine();
+  }
+  if (startTraining) {
+    counter++;
+    autoTrain();
+  } else {
+    counter = 0;
+  }
   backgroundColours();
-
-  counter++;
 }
 
 function backgroundColours() {
-  var colour1 = color(121, 151, 242);
-  var colour2 = color(240, 99, 242);
-  var colour3 = color(69, 76, 115);
-  var colour4 = color(82, 226, 242);
-  var colour5 = color(242, 107, 107);
-  var colourArray = [colour1, colour2, colour3, colour4, colour5];
+  colour1 = color(121, 151, 242);
+  colour2 = color(240, 99, 242);
+  colour3 = color(69, 76, 115);
+  colour4 = color(82, 226, 242);
+  colour5 = color(242, 107, 107);
+  colour6 = color(242, 76, 115);
+  colourArray = [colour1, colour2, colour3, colour4, colour5, colour6];
   if (i % 50 === 0) {
     if (confidences.length !== 0) {
       var index = classWithHighestScore.charCodeAt(0) - 65;
@@ -101,36 +118,42 @@ function backgroundColours() {
     }
   }
 
-  var colour = lerpColor(
-    colourArray[colOld],
-    colourArray[colNew],
-    (i % 50.0) / 50
-  );
+  colour = lerpColor(colourArray[colOld], colourArray[colNew], (i % 50.0) / 50);
   var element = select("body");
   element.style("background-color", colour);
   i += 2;
 }
 
 function autoTrain() {
-  if (startTraining === false) {
-    counter = 0;
+  if (colourArray.length > 0 && startTraining === true) {
+    if (colourBarIndex === 6) {
+      colourBarIndex = 0;
+    }
+    fill(255);
+    rect(0, 440, 640, 40);
+    fill(colourArray[colourBarIndex]);
+    strokeWeight(0);
+    rect(0, 440, map(counter % 300, 0, 299, 0, 640), 40);
+    if (counter % 300 === 0) {
+      colourBarIndex++;
+    }
   }
   if (startTraining === true && counter % 60 === 0) {
     trainingTimer++;
-    if (trainingTimer > 5) {
-      if (trainingTimer <= 10) {
+    if (trainingTimer >= 5) {
+      if (trainingTimer < 10) {
         addExample("A");
         trainingText = "Training Class A";
-      } else if (trainingTimer <= 15) {
+      } else if (trainingTimer < 15) {
         addExample("B");
         trainingText = "Training Class B";
-      } else if (trainingTimer <= 20) {
+      } else if (trainingTimer < 20) {
         addExample("C");
         trainingText = "Training Class C";
-      } else if (trainingTimer <= 25) {
+      } else if (trainingTimer < 25) {
         addExample("D");
         trainingText = "Training Class D";
-      } else if (trainingTimer <= 30) {
+      } else if (trainingTimer < 30) {
         addExample("E");
         trainingText = "Training Class E";
       } else {
@@ -141,7 +164,7 @@ function autoTrain() {
     }
   }
   if (startTraining === true) {
-    if (trainingTimer <= 5) {
+    if (trainingTimer < 5) {
       fill(0);
       textSize(64);
       select("#status").html("Training in... " + (5 - trainingTimer));
@@ -281,13 +304,15 @@ function createButtons() {
     select("#status").html(
       "<a href='https://twitter.com/dvdlxndr'>https://twitter.com/dvdlxndr</a>"
     );
+    playing = true;
     startAudio();
     classify();
   });
 
-  playButton = select("#stopButton");
-  playButton.mousePressed(() => {
+  stopButton = select("#stopButton");
+  stopButton.mousePressed(() => {
     stopAudio();
+    playing = false;
   });
 
   // saveButton = select("#saveButton");
@@ -389,7 +414,7 @@ function drawKeypoints() {
       let keypoint = pose.keypoints[j];
       // Only draw an ellipse is the pose probability is bigger than 0.2
       if (keypoint.score > 0.2) {
-        fill("#20b2aa");
+        fill(colour);
         noStroke();
         ellipse(keypoint.position.x, keypoint.position.y, 10, 10);
       }
@@ -406,7 +431,7 @@ function drawSkeleton() {
     for (let j = 0; j < skeleton.length; j++) {
       let partA = skeleton[j][0];
       let partB = skeleton[j][1];
-      stroke("#20b2aa");
+      stroke(colour);
       line(
         partA.position.x,
         partA.position.y,
