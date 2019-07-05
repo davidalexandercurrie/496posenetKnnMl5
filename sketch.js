@@ -143,23 +143,23 @@ function autoTrain() {
     if (trainingTimer >= 5) {
       if (trainingTimer < 10) {
         addExample("A");
-        trainingText = "Training Class A";
+        trainingText = "Training Pose 1";
       } else if (trainingTimer < 15) {
         addExample("B");
-        trainingText = "Training Class B";
+        trainingText = "Training Pose 2";
       } else if (trainingTimer < 20) {
         addExample("C");
-        trainingText = "Training Class C";
+        trainingText = "Training Pose 3";
       } else if (trainingTimer < 25) {
         addExample("D");
-        trainingText = "Training Class D";
+        trainingText = "Training Pose 4";
       } else if (trainingTimer < 30) {
         addExample("E");
-        trainingText = "Training Class E";
+        trainingText = "Training Pose 5";
       } else {
         startTraining = false;
         trainingTimer = 0;
-        select("#status").html("Training Complete... Click Play When Ready");
+        select("#status").html("Training Complete. Click Play When Ready");
       }
     }
   }
@@ -196,7 +196,7 @@ function audioEngine() {
 
 function modelReady() {
   // TODO
-  select("#status").html("Click Train Model When Ready");
+  select("#status").html("Welcome to ComPoser");
 }
 
 // Add the current frame from the video to the classifier
