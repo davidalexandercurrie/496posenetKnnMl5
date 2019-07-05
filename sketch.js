@@ -143,19 +143,19 @@ function autoTrain() {
     if (trainingTimer >= 5) {
       if (trainingTimer < 10) {
         addExample("A");
-        trainingText = "Training Pose 1";
+        trainingText = "Capturing Pose 1";
       } else if (trainingTimer < 15) {
         addExample("B");
-        trainingText = "Training Pose 2";
+        trainingText = "Capturing Pose 2";
       } else if (trainingTimer < 20) {
         addExample("C");
-        trainingText = "Training Pose 3";
+        trainingText = "Capturing Pose 3";
       } else if (trainingTimer < 25) {
         addExample("D");
-        trainingText = "Training Pose 4";
+        trainingText = "Capturing Pose 4";
       } else if (trainingTimer < 30) {
         addExample("E");
-        trainingText = "Training Pose 5";
+        trainingText = "Capturing Pose 5";
       } else {
         startTraining = false;
         trainingTimer = 0;
